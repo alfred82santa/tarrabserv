@@ -1,4 +1,4 @@
-tarrabserv
-==========
+tarrabme2
+=========
 
-Event ticket manager
+Tarrab.me v2 Ticket Manager

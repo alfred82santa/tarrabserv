@@ -1,0 +1,7 @@
+{% extends "ticketCodes/ticket_base.html" %}
+{% block body_classes %}{{ block.super }} attempt attempt-fail fail fail-not-exists{% endblock %}
+{% block content_title %}NOT EXISTS{% endblock %}
+{% block title %}Fails attempt: code does not exist{% endblock %}
+{% block content %}
+    <h2>{{ code }}</h2>
+{% endblock %}

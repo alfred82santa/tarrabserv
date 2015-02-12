@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body_classes %}list_code list{% endblock %}
+{% block content_title %}Codes{% endblock %}
+{% block content %}
+    {% if codes %}
+        <ul>
+        {% for code in codes %}
+            <li><a href="/codes/{{ code.code }}">{{ code.code }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No codes are available.</p>
+    {% endif %}
+{% endblock %}

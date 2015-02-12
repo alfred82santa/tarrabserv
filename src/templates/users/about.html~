@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block body_classes %}account{% endblock %}
+{% block title %}{{ user.first_name }}::Account information{% endblock %}
+{% block content_title %}{{ user.first_name }}{% endblock %}
+{% block content %}
+{% endblock %}

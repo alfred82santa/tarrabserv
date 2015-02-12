@@ -1,0 +1,17 @@
+{% extends "tickets/ticket_base.html" %}
+{% block body_classes %}{{ block.super }} attempt attempt-fail fail fail-disabled{% endblock %}
+{% block content_title %}DISABLED{% endblock %}
+{% block title %}Fails attempt: disabled code{% endblock %}
+{% block content %}
+    {{ block.super }}
+    {% if attempts %}
+	    <h3>Attempts ({{ attempts.count }}):<h3>
+        <ul>
+        {% for attempt in attempts %}
+            <li>{{ attempt.user.first_name }} at {{ attempt.date|date:"r" }} <span>({{ attempt.date|timesince }})</span></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No attempts<h3>
+    {% endif %}
+{% endblock %} 

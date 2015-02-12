@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        {% load static %}
+        <link type="text/css" href="{% get_static_prefix %}css/main.css" rel="stylesheet" />
+        <title>{% block title %}{% endblock %}</title>
+        <style>
+.fail {background-color: #f55;}
+.success {background-color: #5f5;}
+        </style>
+</head>
+<body id="{% block body_id %}{% endblock %}" class="{% block body_classes %}{% endblock %}">
+  <div id="body">
+    {% block body %}
+      <h1>
+        {% block content_title %}{% endblock %}
+      </h1>
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+</body>
+</html>
+

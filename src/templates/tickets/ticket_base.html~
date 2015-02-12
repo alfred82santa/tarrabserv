@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body_classes %}code code-detail {% block code_classes %}{% endblock %}{% endblock %}
+{% block title %}Ticket code {{ code.code }}{% endblock %}
+{% block content_title %}Details{% endblock %}
+{% block content %}
+    <h2>{{ code.code }}</h2>
+    <h2>PACK: {{ code.ticket_pack.name }}</h2>
+    <h3>EVENT: {{ code.ticket_pack.event.name }}</h3>
+    {% if code.external_customer_name %}
+    <h3>{{ code.external_customer_name }} - {{ code.external_fiscal_number }}</h3>
+    <h3>Locator: {{ code.external_locator }}. ID: {{ code.external_id }}</h3>
+    {% endif %}
+    <h4>Status: {{ code.status }}</h4>
+    <h4>Creation date: {{ code.user_creator.first_name }} at {{ code.creation_date|date:"r"  }} <span>({{ code.creation_date|timesince }})</span></h4>
+    
+    <h4>Modified date: {{ code.user_last_modified.first_name }} at {{ code.modified_date|date:"r"  }} <span>({{ code.modified_date|timesince }})</span></h4>
+    {% if attempts %}
+	    <h3>Attempts ({{ attempts.count }}):<h3>
+        <ul>
+        {% for attempt in attempts %}
+            <li>{{ attempt.user.first_name }} at {{ attempt.date|date:"r" }} <span>({{ attempt.date|timesince }})</span></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No attempts<h3>
+    {% endif %}
+{% endblock %}

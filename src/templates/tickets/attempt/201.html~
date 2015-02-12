@@ -1,0 +1,3 @@
+{% extends "ticketCodes/ticket_base.html" %}
+{% block body_classes %}{{ block.super }} attempt attempt-success success{% endblock %}
+{% block content_title %}SUCCESS{% endblock %}
