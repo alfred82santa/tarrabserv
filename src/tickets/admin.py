@@ -138,6 +138,9 @@ class TicketPackAdmin(admin.ModelAdmin):
 
 admin.site.register(TicketPack, TicketPackAdmin)
 
-new_group, created = Group.objects.get_or_create(name='Gatekeeper')
-permission = Permission.objects.get(codename='tickets.add_attempt')
-new_group.permissions.add(permission)
+try:
+    new_group, created = Group.objects.get_or_create(name='Gatekeeper')
+    permission = Permission.objects.get(codename='tickets.add_attempt')
+    new_group.permissions.add(permission)
+except:
+    pass
