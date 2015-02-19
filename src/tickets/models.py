@@ -109,6 +109,7 @@ class TicketCode(CommonModel):
 
 class TicketCodeSerializer(serializers.ModelSerializer):
     ticket_pack = TicketPackSerializer()
+    modified_by = UserSerializer()
 
     class Meta:
         model = TicketCode
@@ -134,13 +135,20 @@ class Attempt(AbstractAttempt):
     success = models.BooleanField('Using success', default=False, editable=False)
 
 
+class AttemptListItemSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Attempt
+        fields = ('id', 'user', 'success', 'date')
+
+
 class AttemptSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     ticket_code = TicketCodeSerializer()
 
     class Meta:
         model = Attempt
-        depth = 1
 
 
 class FakeAttempt(AbstractAttempt):
