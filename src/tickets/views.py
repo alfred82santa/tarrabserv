@@ -6,7 +6,7 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from tickets.models import TicketCode, Attempt, FakeAttempt, MAX_CODE_LENGTH, MAX_FAKE_CODE_LENGTH, \
-    TicketCodeSerializer, AttemptSerializer
+    TicketCodeSerializer, AttemptSerializer, AttemptListItemSerializer
 from django.contrib.auth.decorators import permission_required
 
 
@@ -79,6 +79,21 @@ class TicketCodeAttemptViewSet(mixins.CreateModelMixin,
                                              ticket_pack__event__active=True)
         queryset = super(TicketCodeAttemptViewSet, self).get_queryset()
         return queryset.filter(ticket_code=ticket_code).all()
+
+    def list(self, request, *args, **kwargs):
+        instance = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            class SerializerClass(self.pagination_serializer_class):
+
+                class Meta:
+                    object_serializer_class = AttemptListItemSerializer
+            pagination_serializer_class = SerializerClass
+            context = self.get_serializer_context()
+            serializer = pagination_serializer_class(instance=page, context=context)
+        else:
+            serializer = AttemptListItemSerializer(instance, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         attempt, ticket_code = TicketCode.objects.make_attempt(kwargs.get('code'), request.user)

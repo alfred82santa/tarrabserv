@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SITE_ROOT = os.path.realpath(os.path.join(BASE_DIR, '..'))
@@ -105,5 +104,5 @@ REST_FRAMEWORK = {
 
 from django.contrib import admin
 
-admin.site.site_header = _('Tarrab.me administration')
-admin.site.site_title = _('Tarrab.me site admin')
+admin.site.site_header = 'Tarrab.me administration'
+admin.site.site_title = 'Tarrab.me site admin'

@@ -26,8 +26,10 @@ class Migration(migrations.Migration):
                 ('end_date', models.DateTimeField(verbose_name='End datetime')),
                 ('active', models.BooleanField(default=False)),
                 ('description', models.TextField(default='', blank=True)),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='created_events_event', null=True, to=settings.AUTH_USER_MODEL, blank=True)),
-                ('modified_by', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='modification_events_event', null=True, to=settings.AUTH_USER_MODEL, blank=True)),
+                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL,
+                                                 related_name='created_events_event', null=True, to=settings.AUTH_USER_MODEL, blank=True)),
+                ('modified_by', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL,
+                                                  related_name='modification_events_event', null=True, to=settings.AUTH_USER_MODEL, blank=True)),
             ],
             options={
                 'abstract': False,
