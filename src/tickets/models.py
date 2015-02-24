@@ -62,14 +62,15 @@ class TicketCode(CommonModel):
     )
     code = models.CharField(max_length=MAX_CODE_LENGTH, unique=True)
     ticket_pack = models.ForeignKey(TicketPack, related_name='ticket_codes')
-    status = models.CharField('status', max_length=2, choices=TICKET_CODE_STATUS, editable=False,
-                              default=TICKET_CODE_STATUS_NEW)
-    ticket_number = models.PositiveIntegerField('Ticket number', null=True)
+    status = models.CharField('status', max_length=2, choices=TICKET_CODE_STATUS,
+                              editable=False, default=TICKET_CODE_STATUS_NEW)
+    ticket_number = models.PositiveIntegerField('Ticket number',
+                                                null=True, blank=True)
 
-    external_id = models.CharField(max_length=50, null=True)
-    external_customer_name = models.CharField(max_length=200, null=True)
-    external_fiscal_number = models.CharField(max_length=20, null=True)
-    external_locator = models.CharField(max_length=40, null=True)
+    external_id = models.CharField(max_length=50, null=True, blank=True)
+    external_customer_name = models.CharField(max_length=200, null=True, blank=True)
+    external_fiscal_number = models.CharField(max_length=20, null=True, blank=True)
+    external_locator = models.CharField(max_length=40, null=True, blank=True)
 
     objects = TicketCodeManager()
 
@@ -87,19 +88,19 @@ class TicketCode(CommonModel):
         if self.status == TicketCode.TICKET_CODE_STATUS_DISABLED:
             return None
 
-        at = Attempt(code=self.code,
-                     success=False,
+        at = Attempt(success=False,
                      user=user,
                      ticket_code=self)
         at.save()
 
-        first_attempt = self.attempt_list.order_by('id').all()[:1][0]
-        if (self.status != TicketCode.TICKET_CODE_STATUS_USED) and (first_attempt.id == at.id):
-            at.success = True
-            at.save()
-            self.status = TicketCode.TICKET_CODE_STATUS_USED
-            self.user_last_modified = user
-            self.save()
+        if self.status != TicketCode.TICKET_CODE_STATUS_USED:
+            first_attempt = self.attempt_list.order_by('id').all()[:1][0]
+            if first_attempt.id == at.id:
+                at.success = True
+                at.save()
+                self.status = TicketCode.TICKET_CODE_STATUS_USED
+                self.user_last_modified = user
+                self.save()
 
         return at
 
@@ -115,7 +116,7 @@ class TicketCodeSerializer(serializers.ModelSerializer):
         model = TicketCode
 
 
-class AbstractAttempt(models.Model):
+class BaseAttempt(models.Model):
     date = models.DateTimeField('attempt datetime', auto_now_add=True, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, None, models.ManyToOneRel, related_name="attempts_%(class)s")
 
@@ -128,8 +129,7 @@ class AbstractAttempt(models.Model):
         abstract = True
 
 
-class Attempt(AbstractAttempt):
-    code = models.CharField(max_length=MAX_CODE_LENGTH)
+class Attempt(BaseAttempt):
     ticket_code = models.ForeignKey(TicketCode, editable=False, null=False,
                                     blank=False, related_name='attempt_list')
     success = models.BooleanField('Using success', default=False, editable=False)
@@ -151,5 +151,5 @@ class AttemptSerializer(serializers.ModelSerializer):
         model = Attempt
 
 
-class FakeAttempt(AbstractAttempt):
+class FakeAttempt(BaseAttempt):
     code = models.CharField(max_length=MAX_FAKE_CODE_LENGTH)
